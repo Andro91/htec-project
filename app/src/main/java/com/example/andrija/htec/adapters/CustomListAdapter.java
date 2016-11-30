@@ -13,12 +13,12 @@ import com.example.andrija.htec.models.ListItemModel;
 import java.util.ArrayList;
 
 
-public class AndroAdapter extends BaseAdapter {
+public class CustomListAdapter extends BaseAdapter {
     private Context context; //context
     private ArrayList<ListItemModel> items; //data source of the list adapter
 
     //public constructor
-    public AndroAdapter(Context context, ArrayList<ListItemModel> items) {
+    public CustomListAdapter(Context context, ArrayList<ListItemModel> items) {
         this.context = context;
         this.items = items;
     }

@@ -18,10 +18,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.example.andrija.htec.adapters.AndroAdapter;
+import com.example.andrija.htec.adapters.CustomListAdapter;
 import com.example.andrija.htec.containers.Container;
 import com.example.andrija.htec.models.ListItemModel;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 
 public class MainActivity extends Activity {
@@ -33,12 +34,12 @@ public class MainActivity extends Activity {
 
     // URL of array to be parsed
     String JsonUrl = "https://raw.githubusercontent.com/danieloskarsson/mobile-coding-exercise/master/items.json";
-    // This ArrayList will hold the results
-    ArrayList<ListItemModel> data = new ArrayList<>();
     // Defining the Volley request queue that handles the URL request concurrently
     RequestQueue requestQueue;
     //MainActivity ListView
     ListView listView;
+    // This ArrayList will hold the data
+    ArrayList<ListItemModel> data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +47,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         listView = (ListView) findViewById(R.id.listView);
-
+        data = new ArrayList<>();
         requestQueue = Volley.newRequestQueue(this);
 
         JsonArrayRequest arrayRequest = new JsonArrayRequest(JsonUrl,
@@ -63,9 +64,16 @@ public class MainActivity extends Activity {
                                 String title = jsonObject.getString(KEY_TITLE);
                                 String description = jsonObject.getString(KEY_DESCRIPTION);
 
-                                ListItemModel listItem = new ListItemModel(image,title,description);
+                                try {
+                                    //Attempt to create a new list item
+                                    // if the image url is properly formatted
+                                    ListItemModel listItem = new ListItemModel(image,title,description);
+                                    data.add(i,listItem);
+                                } catch (MalformedURLException ex){
+                                    Log.e("URL Error",
+                                            "Image url is not properly formatted. Index: " + i);
+                                }
 
-                                data.add(i,listItem);
                             }
 
                             Container.getInstance().setData(data);
@@ -90,7 +98,8 @@ public class MainActivity extends Activity {
     }
 
     public void initializeListView(ListView listView){
-        AndroAdapter adapter = new AndroAdapter(MainActivity.this, data);
+        CustomListAdapter adapter = new CustomListAdapter(MainActivity.this,
+                Container.getInstance().getData());
 
         listView.setAdapter(adapter);
 
@@ -98,9 +107,10 @@ public class MainActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
-                intent.putExtra("itemId",i);
-                startActivity(intent);
+            Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+            intent.putExtra("itemId",i);
+            startActivity(intent);
+
             }
         });
     }

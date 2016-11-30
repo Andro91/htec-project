@@ -1,6 +1,10 @@
 package com.example.andrija.htec;
 
+import com.example.andrija.htec.models.ListItemModel;
+
 import org.junit.Test;
+
+import java.net.MalformedURLException;
 
 import static org.junit.Assert.*;
 
@@ -10,8 +14,5 @@ import static org.junit.Assert.*;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 public class ExampleUnitTest {
-    @Test
-    public void addition_isCorrect() throws Exception {
-        assertEquals(4, 2 + 2);
-    }
+
 }

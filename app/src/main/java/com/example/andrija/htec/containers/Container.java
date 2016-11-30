@@ -6,8 +6,8 @@ import java.util.ArrayList;
 
 /**
  * Created by Andrija on 30-Nov-16.
+ * Container class intended to persist the data parsed form the web service
  */
-
 public class Container {
 
     private static Container instance = null;
