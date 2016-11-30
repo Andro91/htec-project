@@ -8,17 +8,17 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.andrija.htec.R;
-import com.example.andrija.htec.models.ListItem;
+import com.example.andrija.htec.models.ListItemModel;
 
 import java.util.ArrayList;
 
 
 public class AndroAdapter extends BaseAdapter {
     private Context context; //context
-    private ArrayList<ListItem> items; //data source of the list adapter
+    private ArrayList<ListItemModel> items; //data source of the list adapter
 
     //public constructor
-    public AndroAdapter(Context context, ArrayList<ListItem> items) {
+    public AndroAdapter(Context context, ArrayList<ListItemModel> items) {
         this.context = context;
         this.items = items;
     }
@@ -47,7 +47,7 @@ public class AndroAdapter extends BaseAdapter {
         }
 
         // get current item to be displayed
-        ListItem currentItem = (ListItem) getItem(position);
+        ListItemModel currentItem = (ListItemModel) getItem(position);
 
         // get the TextView for item name and item description
         TextView textViewItemName = (TextView)

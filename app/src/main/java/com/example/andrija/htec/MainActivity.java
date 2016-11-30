@@ -1,8 +1,11 @@
 package com.example.andrija.htec;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.android.volley.RequestQueue;
@@ -15,7 +18,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.example.andrija.htec.models.ListItem;
+import com.example.andrija.htec.adapters.AndroAdapter;
+import com.example.andrija.htec.containers.Container;
+import com.example.andrija.htec.models.ListItemModel;
 
 import java.util.ArrayList;
 
@@ -26,11 +31,10 @@ public class MainActivity extends Activity {
     private static final String KEY_TITLE = "title";
     private static final String KEY_DESCRIPTION = "description";
 
-
     // URL of array to be parsed
     String JsonUrl = "https://raw.githubusercontent.com/danieloskarsson/mobile-coding-exercise/master/items.json";
     // This ArrayList will hold the results
-    ArrayList<ListItem> data = new ArrayList<>();
+    ArrayList<ListItemModel> data = new ArrayList<>();
     // Defining the Volley request queue that handles the URL request concurrently
     RequestQueue requestQueue;
     //MainActivity ListView
@@ -59,10 +63,12 @@ public class MainActivity extends Activity {
                                 String title = jsonObject.getString(KEY_TITLE);
                                 String description = jsonObject.getString(KEY_DESCRIPTION);
 
-                                ListItem listItem = new ListItem(image,title,description);
+                                ListItemModel listItem = new ListItemModel(image,title,description);
 
                                 data.add(i,listItem);
                             }
+
+                            Container.getInstance().setData(data);
 
                             initializeListView(listView);
 
@@ -81,11 +87,21 @@ public class MainActivity extends Activity {
         );
 
         requestQueue.add(arrayRequest);
-
-
     }
 
     public void initializeListView(ListView listView){
+        AndroAdapter adapter = new AndroAdapter(MainActivity.this, data);
 
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+                intent.putExtra("itemId",i);
+                startActivity(intent);
+            }
+        });
     }
 }
